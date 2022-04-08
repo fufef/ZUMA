@@ -1,6 +1,7 @@
 import math
 import random
 
+from userBall import userBalls
 from balls import Ball
 from segment import Segment
 
@@ -19,6 +20,7 @@ class Level():
         self.balls_amount = 1
         self.max_balls = 5
         self.game_end = False
+        self.userBallS = userBalls()
 
     def add_ball(self):
         used_colors = []
