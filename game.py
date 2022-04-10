@@ -1,9 +1,14 @@
+import PyQt5
 from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5.QtCore import QPointF
+
+import level
 from balls import Ball
 from level import Level
 from segment import Segment
 from userBall import userBall
 import math
+
 
 class Game(QtWidgets.QFrame):
     def __init__(self, main_window):
@@ -29,14 +34,13 @@ class Game(QtWidgets.QFrame):
 
         for i in self.level.segments:
             painter.drawLine(*i.start, *i.end)
-        self.counter += 1
 
-        if (self.counter%50==0 and self.level.balls_amount < self.level.max_balls):
-            self.level.add_ball()
+        painter.setPen(QtCore.Qt.NoPen)
+
         for i in self.level.balls:
-            painter.setPen(QtGui.QPen(QtCore.Qt.red, 10))
-            painter.setBrush(QtGui.QBrush(QtCore.Qt.red))
-            painter.drawEllipse(int(i.position[0]-i.radius), int(i.position[1]-i.radius), i.radius*2, i.radius*2)
+            painter.setBrush(QtGui.QBrush(i.color))
+            painter.drawEllipse(int(i.position[0] - i.radius), int(i.position[1] - i.radius), i.radius * 2,
+                                i.radius * 2)
 
         self.drawBall(painter, self.level.userBallS.static)
         for i in self.level.userBallS.moving:
@@ -44,44 +48,88 @@ class Game(QtWidgets.QFrame):
 
         painter.end()
 
-    def drawBall(self, painter, ball : userBall):
-        painter.setPen(QtGui.QPen(QtCore.Qt.red, 10))
-        painter.setBrush(QtGui.QBrush(QtCore.Qt.red))
-        painter.drawEllipse(int(ball.position[0]-ball.radius), int(ball.position[1]-ball.radius), ball.radius*2, ball.radius*2)
+    def drawBall(self, painter, ball: userBall):
+        painter.setBrush(QtGui.QBrush(ball.color))
+        painter.drawEllipse(int(ball.position[0] - ball.radius), int(ball.position[1] - ball.radius), ball.radius * 2,
+                            ball.radius * 2)
 
     def paintEvent(self, event):
-        if not(self.level.game_end):
+        if not (self.level.game_end):
             for i in self.level.balls:
-                self.level.move_ball(i, 1)
+                self.level.move_ball(i, self.level.speed)
+            self.counter += 1
+
+            diameter_over_speed = self.level.balls[0].radius * 2 / self.level.speed
+
+            if (self.counter >= diameter_over_speed and self.level.balls_amount < self.level.max_balls):
+                self.counter -= diameter_over_speed
+                self.level.add_ball()
+
             for i in self.level.userBallS.moving:
                 i.position = (i.position[0] + i.moveSpeed[0], i.position[1] + i.moveSpeed[1])
+
             epsilon = 1
             for i in self.level.userBallS.moving:
-                for j in self.level.segments:
-                    #print("YEP")
-                    d1 = self.getDistance(j.start, i.position)
-                    d2 = self.getDistance(j.end, i.position)
-                    d3 = self.getDistance(j.end, j.start)
-                    if(abs(d1 + d2 - d3) < epsilon):
-                        p = self.line_intersection((j.start, j.end), ((200, 200), (i.position)))
-                        count = 0
-                        for k in self.level.balls:
-                            if(abs(self.getDistance(k.position, p)) < 2 * k.radius + epsilon):
-                                count += 1
+                for j1, segment in enumerate(self.level.segments):
+                    d1 = math.dist(segment.start, i.position)
+                    d2 = math.dist(segment.end, i.position)
+                    d3 = math.dist(segment.end, segment.start)
 
-                        if(count >= 2):
-                            self.level.balls.append(Ball("", p, self.level.segments.index(j)))
+                    if (abs(d1 + d2 - d3) < epsilon):
+                        p = self.line_intersection((segment.start, segment.end), ((200, 200), i.position))
+                        indices = []
+
+                        nearest_index = None
+                        min_dist = None
+
+                        for k, b in enumerate(self.level.balls):
+                            dist = math.dist(b.position, p)
+
+                            if not min_dist or dist < min_dist:
+                                min_dist = dist
+                                nearest_index = k
+
+                            if (dist < 2 * b.radius + epsilon):
+                                indices.append(k)
+
+                        if (len(indices) > 0):
+                            moving_dist = self.level.balls[0].radius * 2 - min_dist
+                            new_ball = Ball(self.level.userBallS.moving[0].color, p, j1)
+                            self.level.balls.insert(nearest_index + 1, new_ball)
+
+                            for k in range(nearest_index + 1):
+                                self.level.move_ball(self.level.balls[k], moving_dist)
+
+                            self.collapse()
                             self.level.userBallS.moving.remove(i)
         self.draw()
         self.update()
+
+    def collapse(self):
+        r = set()
+        for i in range(len(self.level.balls)):
+            ball = self.level.balls[i]
+            collided = [j for j in range(i - 1, i + 2, 2)
+                        if -1 < j < len(self.level.balls) and self.is_intersect(ball, self.level.balls[j])]
+
+            collided_balls = map(lambda x: self.level.balls[x], collided)
+            same_clr_collided = set(filter(lambda x: x.color == ball.color,
+                                           collided_balls))
+
+            if len(same_clr_collided) > 1:
+                r.add(ball)
+                r.update(same_clr_collided)
+        self.level.balls = list(filter(lambda x: x not in r, self.level.balls))
+
+    def is_intersect(self, ball1: Ball, ball2: Ball):
+        return math.dist(ball1.position, ball2.position) <= ball1.radius + ball2.radius + 0.01
 
     def det(self, a, b):
         return a[0] * b[1] - a[1] * b[0]
 
     def line_intersection(self, line1, line2):
         xdiff = (line1[0][0] - line1[1][0], line2[0][0] - line2[1][0])
-        ydiff = (line1[0][1] - line1[1][1], line2[0][1] - line2[1][1]) 
-
+        ydiff = (line1[0][1] - line1[1][1], line2[0][1] - line2[1][1])
 
         div = self.det(xdiff, ydiff)
         if div == 0:
@@ -92,32 +140,18 @@ class Game(QtWidgets.QFrame):
         y = self.det(d, ydiff) / div
         return x, y
 
-
-    def getDistance(self, p1, p2):
-        x1 = p1[0]
-        y1 = p1[1]
-        x2 = p2[0]
-        y2 = p2[1]
-        return math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))
-    
     def mousePressEvent(self, e: QtGui.QMouseEvent):
-        d1 = 1
-        d2 = 1
         staticBall = self.level.userBallS.static
         deltaX = e.windowPos().x() - staticBall.position[0]
         deltaY = e.windowPos().y() - staticBall.position[1]
-        if(deltaX < 0):
-            d1 = -1
-        if(deltaY < 0):
-            d2 = -1
-        deltaX = abs(deltaX)
-        deltaY = abs(deltaY)
-        angle = math.atan(deltaY / deltaX)
-        staticBall.moveSpeed = (d1 * math.cos(angle), d2 * math.sin(angle))
+
+        speed = 10
+        angle = math.atan2(deltaY, deltaX)
+        staticBall.moveSpeed = (speed * math.cos(angle), speed * math.sin(angle))
         self.level.userBallS.moving.append(staticBall)
-        self.level.userBallS.static = userBall("", (200, 200))
-        #self.draw()
-        #self.update()
+        self.level.userBallS.static = userBall(level.generate_color(self.level.colors, []), (200, 200))
+        # self.draw()
+        # self.update()
 
     def end_game(self):
         pass

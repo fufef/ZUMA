@@ -1,26 +1,33 @@
 import math
 import random
 
+from PyQt5 import QtGui
 from userBall import userBalls
 from balls import Ball
 from segment import Segment
 
 
-def _generate_ball(colors: list, x: int, y: int, prev_colors=None):
+def _generate_ball(colors: list, x: int, y: int, prev_colors: list):
+    return Ball(generate_color(colors, prev_colors), (x, y))
+
+
+def generate_color(colors: list, prev_colors: list):
     allowed_colors = list(filter(lambda x: not prev_colors or x not in prev_colors, colors))
-    return Ball(allowed_colors[random.randint(0, len(allowed_colors) - 1)], (x, y))
+    return allowed_colors[random.randint(0, len(allowed_colors) - 1)]
 
 
 class Level():
-    def __init__(self, number: int, segments: list, colors: list):
+    def __init__(self, number: int, segments: list, colors: list, max_balls: int):
         self.number = number
         self.segments = segments  # мб + самый первый отрезок
         self.colors = colors
-        self.balls = [_generate_ball(colors, *segments[0].start)]
+        self.balls = [_generate_ball(colors, *segments[0].start, [])]
         self.balls_amount = 1
-        self.max_balls = 5
+        self.max_balls = max_balls
         self.game_end = False
-        self.userBallS = userBalls()
+        self.userBallS = userBalls(generate_color(colors, []))
+
+        self.speed = 0.2
 
     def add_ball(self):
         used_colors = []
@@ -57,6 +64,7 @@ class Level():
             number = int(f.readline())
             points = list(map(lambda x: tuple(map(int, x[1:-1].split(','))), f.readline().split()))
             segments = list(map(lambda x: Segment(*x), zip(points, points[1:])))
-            colors = f.readline().split()
+            colors = list(map(lambda x: QtGui.QColor(x), f.readline().split()))
+            max_balls = int(f.readline())
 
-        return Level(number, segments, colors)
+        return Level(number, segments, colors, max_balls)
