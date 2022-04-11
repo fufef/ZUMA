@@ -19,13 +19,23 @@ class Game(QtWidgets.QFrame):
         self.backMenu_btn = QtWidgets.QPushButton(self)
         self.backMenu_btn.setGeometry(QtCore.QRect(50, 50, 50, 50))
         self.backMenu_btn.setObjectName("backMenu_btn")
-        self.backMenu_btn.clicked.connect(lambda: main_window.change_window(0))
+        self.backMenu_btn.clicked.connect(self.backMenu_action)
 
-        self.level = Level.parse("level1.txt")
+        self.levels = list()
+        self.levelIndex = 0
+        self.levels.append(Level.parse("level1.txt"))
+        self.levels.append(Level.parse("level2.txt"))
+        self.level = self.levels[self.levelIndex]
         self.counter = 0
+        self.paused = False
 
         self.setObjectName("GameWindow")
         self.setStyleSheet("#GameWindow{border-image:url(resources/Icon.png)}")
+
+    def backMenu_action(self):
+        self.level.game_end = True
+        self.paused = False
+        self.main_window.change_window(0)
 
     def draw(self):
         painter = QtGui.QPainter()
@@ -54,7 +64,15 @@ class Game(QtWidgets.QFrame):
                             ball.radius * 2)
 
     def paintEvent(self, event):
-        if not (self.level.game_end):
+        if(self.paused):
+            pass
+        elif(len(self.level.balls) == 0):
+            self.level = self.levels[self.levelIndex + 1]
+            self.counter = 0
+        elif self.level.game_end:
+            self.level = Level(self.level.number, self.level.segments, self.level.colors, self.level.max_balls)
+            self.counter = 0
+        else:
             for i in self.level.balls:
                 self.level.move_ball(i, self.level.speed)
             self.counter += 1
@@ -141,17 +159,32 @@ class Game(QtWidgets.QFrame):
         return x, y
 
     def mousePressEvent(self, e: QtGui.QMouseEvent):
-        staticBall = self.level.userBallS.static
-        deltaX = e.windowPos().x() - staticBall.position[0]
-        deltaY = e.windowPos().y() - staticBall.position[1]
+        if(self.paused):
+            pass
+        else:
+            staticBall = self.level.userBallS.static
+            deltaX = e.windowPos().x() - staticBall.position[0]
+            deltaY = e.windowPos().y() - staticBall.position[1]
 
-        speed = 10
-        angle = math.atan2(deltaY, deltaX)
-        staticBall.moveSpeed = (speed * math.cos(angle), speed * math.sin(angle))
-        self.level.userBallS.moving.append(staticBall)
-        self.level.userBallS.static = userBall(level.generate_color(self.level.colors, []), (200, 200))
+            speed = 10
+            angle = math.atan2(deltaY, deltaX)
+            staticBall.moveSpeed = (speed * math.cos(angle), speed * math.sin(angle))
+            self.level.userBallS.moving.append(staticBall)
+            self.level.userBallS.static = userBall(level.generate_color(self.level.colors, []), (200, 200))
         # self.draw()
         # self.update()
+    
+    def keyPressEvent(self, e: QtGui.QKeyEvent) -> None:
+        if(e.key() == 80):#P
+                self.paused = not self.paused
+        if(self.paused):
+            pass
+        else:
+            if(e.key() == 82):#R
+                self.level = Level(self.level.number, self.level.segments, self.level.colors, self.level.max_balls)
+                self.counter = 0
+        
+    
 
     def end_game(self):
         pass
