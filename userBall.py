@@ -9,7 +9,15 @@ class userBall():
         self.moveSpeed = (0, 0)
 
     def __eq__(self, other):
-        return True
+        return isinstance(other, userBall) and self.color == other.color and self.position == other.position and \
+               self.moveSpeed == other.moveSpeed
+
+    def __hash__(self):
+        p = 53
+        return (hash(self.color.Rgb) * p + hash(self.position)) * p * hash(self.moveSpeed)
+
+    def is_on_screen(self, screen_size: (int, int)):
+        return 0 <= self.position[0] <= screen_size[0] and 0 <= self.position[1] <= screen_size[1]
 
 
 class userBalls():
