@@ -141,6 +141,7 @@ class Game(QtWidgets.QFrame):
                             if dist < 2 * b.radius + epsilon:
                                 indices.append(k)
 
+                        
                         if len(indices) > 0:
                             moving_dist = self.level.balls[0].radius * 2 - min_dist
                             new_ball = Ball(self.level.userBallS.moving[0].color, p, j1)
