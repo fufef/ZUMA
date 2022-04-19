@@ -30,5 +30,5 @@ class Menu(QtWidgets.QFrame):
         
     def _retranslate_ui(self):
         _translate = QtCore.QCoreApplication.translate
-        self.start_btn.setText(_translate("Menu", "ИГраТб"))
-        self.config_btn.setText(_translate("Menu", "НаСтрОикИ"))
+        self.start_btn.setText(_translate("Menu", "Играть"))
+        self.config_btn.setText(_translate("Menu", "Настройки"))

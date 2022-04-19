@@ -17,17 +17,18 @@ def generate_color(colors: list, prev_colors: list):
 
 
 class Level():
-    def __init__(self, number: int, segments: list, colors: list, max_balls: int):
+    def __init__(self, number: int, segments: list, colors: list, max_balls: int, screen_size: (int, int)):
         self.number = number
-        self.segments = segments  # мб + самый первый отрезок
+        self.segments = segments
         self.colors = colors
         self.balls = [_generate_ball(colors, *segments[0].start, [])]
         self.balls_amount = 1
         self.max_balls = max_balls
         self.game_end = False
-        self.userBallS = userBalls(generate_color(colors, []))
+        self.userBallS = userBalls(generate_color(colors, []), screen_size)
+        self.screen_size = screen_size
 
-        self.speed = 0.2
+        self.speed = 0.06
 
     def add_ball(self):
         used_colors = []
@@ -59,7 +60,7 @@ class Level():
         return np, segment_number
 
     @staticmethod
-    def parse(file: str):
+    def parse(file: str, screen_size: (int, int)):
         with open(file) as f:
             number = int(f.readline())
             points = list(map(lambda x: tuple(map(int, x[1:-1].split(','))), f.readline().split()))
@@ -67,4 +68,4 @@ class Level():
             colors = list(map(lambda x: QtGui.QColor(x), f.readline().split()))
             max_balls = int(f.readline())
 
-        return Level(number, segments, colors, max_balls)
+        return Level(number, segments, colors, max_balls, screen_size)

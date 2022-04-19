@@ -21,6 +21,6 @@ class userBall():
 
 
 class userBalls():
-    def __init__(self, color: QtGui.QColor):
+    def __init__(self, color: QtGui.QColor, screen_size: (int, int)):
         self.moving = list()
-        self.static = userBall(color, (200, 200))
+        self.static = userBall(color, (screen_size[0] / 2, screen_size[1] / 2))
