@@ -1,5 +1,4 @@
 import math
-import this
 from balls import Ball
 
 class GeometryExtensions:

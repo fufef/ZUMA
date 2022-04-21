@@ -1,5 +1,5 @@
 import math
-from geometryExtetions import GeometryExtensions
+from geometryExtensions import GeometryExtensions
 from PyQt5 import QtWidgets, QtCore, QtGui
 from gameModel import GameModel
 import level
@@ -34,8 +34,8 @@ class Game(QtWidgets.QFrame):
         self.setStyleSheet("#GameWindow{border-image:url(resources/background.png)}")
 
     def back_menu_action(self):
-        self.level.game_end = True
-        self.paused = False
+        self.model.level.game_end = True
+        self.model.paused = False
         self.main_window.change_window(0)
 
     def draw(self):

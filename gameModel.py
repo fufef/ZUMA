@@ -1,7 +1,7 @@
 import math
 from level import Level
 from balls import Ball
-from geometryExtetions import GeometryExtensions
+from geometryExtensions import GeometryExtensions
 from userBall import userBall
 from level import generate_color
 
@@ -49,6 +49,7 @@ class GameModel:
 
             for i in self.level.userBallS.moving:
                 self.tmp(i)
+                
     def tmp(self, i):
         epsilon = 1
         for j1, segment in enumerate(self.level.segments):
@@ -78,9 +79,7 @@ class GameModel:
         for k, b in enumerate(self.level.balls):
             if not r:
                 r = b.radius
-
             dist = math.dist(b.position, p)
-
             if not min_dist1 or dist < min_dist1:
                 min_dist2, nearest_index2 = min_dist1, nearest_index1
                 min_dist1 = dist
@@ -149,7 +148,6 @@ class GameModel:
         self.paused = not self.paused
 
     def restart(self):
-        self.level = Level(self.level.number, self.level.segments, self.level.colors, self.level.max_balls,
-                                   self.level.screen_size)
+        self.level = Level(self.level.number, self.level.segments, self.level.colors, self.level.max_balls, self.level.screen_size)
         self.counter = 0
 
