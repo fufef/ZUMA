@@ -5,6 +5,7 @@ from geometryExtensions import GeometryExtensions
 from userBall import userBall
 from level import generate_color
 
+
 class GameModel:
     def __init__(self, levels: list):
         self.levelIndex = 0
@@ -48,9 +49,10 @@ class GameModel:
             self.level.userBallS.moving = list(filter(lambda x: x not in del_balls, self.level.userBallS.moving))
 
             for i in self.level.userBallS.moving:
-                self.tmp(i)
-                
-    def tmp(self, i):
+                self.intersect_balls(i)
+
+    '''проверяет не попал ли пользователь в шарики и выполняет нужное действие'''
+    def intersect_balls(self, i):
         epsilon = 1
         for j1, segment in enumerate(self.level.segments):
             d1 = math.dist(segment.start, i.position)
@@ -58,7 +60,8 @@ class GameModel:
             d3 = math.dist(segment.end, segment.start)
 
             if abs(d1 + d2 - d3) < epsilon:
-                p = GeometryExtensions.line_intersection((segment.start, segment.end), (self.level.userBallS.static.position, i.position))
+                p = GeometryExtensions.line_intersection((segment.start, segment.end),
+                                                         (self.level.userBallS.static.position, i.position))
                 indices, nearest_index1, min_dist1, nearest_index2, min_dist2, r = \
                     self._get_balls_intersection_data(p, epsilon)
 
@@ -70,6 +73,7 @@ class GameModel:
 
                     self.level.userBallS.moving.remove(i)
 
+    '''достает данные пересекающихся шаров'''
     def _get_balls_intersection_data(self, p, epsilon):
         indices = []
         nearest_index1, nearest_index2 = None, None
@@ -93,6 +97,7 @@ class GameModel:
 
         return indices, nearest_index1, min_dist1, nearest_index2, min_dist2, r
 
+    '''добавляет выстреленный шарик к остальным на начало отрезко'''
     def _insert_in_begin_position(self):
         prev_ball = self.level.balls[0]
         prev_pos = prev_ball.position
@@ -104,6 +109,7 @@ class GameModel:
         prev_ball.segment_number = prev_seg_num
         self.level.balls.insert(0, new_ball)
 
+    '''добавляет выстреленный шарик к остальным'''
     def _insert_standard(self, nearest_index1, nearest_index2, min_dist2, r, seg_num):
         if not nearest_index2:
             nearest_index2 = nearest_index1
@@ -119,12 +125,14 @@ class GameModel:
         for k in range(nearest_index + 1):
             self.level.move_ball(self.level.balls[k], self.level.balls[k].radius * 2)
 
+    '''уничтожает соседние шарики одинакового цвета'''
     def collapse(self):
         r = set()
         for i in range(len(self.level.balls)):
             ball = self.level.balls[i]
             collided = [j for j in range(i - 1, i + 2, 2)
-                        if -1 < j < len(self.level.balls) and GeometryExtensions.is_intersect(ball, self.level.balls[j], 1)]
+                        if -1 < j < len(self.level.balls) and GeometryExtensions.is_intersect(ball, self.level.balls[j],
+                                                                                              1)]
             collided_balls = map(lambda x: self.level.balls[x], collided)
             same_clr_collided = set(filter(lambda x: x.color == ball.color,
                                            collided_balls))
@@ -134,6 +142,7 @@ class GameModel:
                 r.update(same_clr_collided)
         self.level.balls = list(filter(lambda x: x not in r, self.level.balls))
 
+    '''стрельба'''
     def shoot(self, p):
         staticBall = self.level.userBallS.static
         deltaX = p[0] - staticBall.position[0]
@@ -143,11 +152,11 @@ class GameModel:
         staticBall.moveSpeed = (speed * math.cos(angle), speed * math.sin(angle))
         self.level.userBallS.moving.append(staticBall)
         self.level.userBallS.static = userBall(generate_color(self.level.colors, []), staticBall.position)
-    
+
     def pause(self):
         self.paused = not self.paused
 
     def restart(self):
-        self.level = Level(self.level.number, self.level.segments, self.level.colors, self.level.max_balls, self.level.screen_size)
+        self.level = Level(self.level.number, self.level.segments, self.level.colors, self.level.max_balls,
+                           self.level.screen_size)
         self.counter = 0
-

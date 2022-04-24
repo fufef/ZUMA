@@ -7,10 +7,13 @@ from balls import Ball
 from level import Level
 from userBall import userBall
 
+
+'''отображает шар'''
 def draw_ball(painter, ball: [userBall | Ball]):
     painter.setBrush(QtGui.QBrush(ball.color))
     painter.drawEllipse(int(ball.position[0] - ball.radius), int(ball.position[1] - ball.radius), ball.radius * 2,
                         ball.radius * 2)
+
 
 class Game(QtWidgets.QFrame):
     def __init__(self, main_window):
@@ -27,7 +30,7 @@ class Game(QtWidgets.QFrame):
         levels.append(Level.parse("level1.txt", self.screen_size))
         levels.append(Level.parse("level2.txt", self.screen_size))
         levels.append(Level.parse("level3.txt", self.screen_size))
-        
+
         self.model = GameModel(levels)
 
         self.setObjectName("GameWindow")

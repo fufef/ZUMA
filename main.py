@@ -11,7 +11,7 @@ class MainWindow(QtWidgets.QMainWindow):
         super().__init__()
         self.setWindowIcon(QtGui.QIcon("resources/Icon.png"))
         self.setWindowTitle("Zuma THE GAME")
-        self.setFixedSize(1200, 800)  # Todo set correct size
+        self.setFixedSize(1200, 800)
 
         self.central_widget = QtWidgets.QWidget(self)
         self.stacked_widget = QtWidgets.QStackedWidget(self.central_widget)
@@ -31,6 +31,5 @@ class MainWindow(QtWidgets.QMainWindow):
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     w = MainWindow()
-    # w.setObjectName("MainWindow")
     w.show()
     sys.exit(app.exec_())

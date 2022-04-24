@@ -7,10 +7,12 @@ from balls import Ball
 from segment import Segment
 
 
+'''генерация нового шарика'''
 def _generate_ball(colors: list, x: int, y: int, prev_colors: list):
     return Ball(generate_color(colors, prev_colors), (x, y))
 
 
+'''генерация возможного цвета для шарика'''
 def generate_color(colors: list, prev_colors: list):
     allowed_colors = list(filter(lambda x: not prev_colors or x not in prev_colors, colors))
     return allowed_colors[random.randint(0, len(allowed_colors) - 1)]
@@ -30,6 +32,7 @@ class Level():
 
         self.speed = 0.06
 
+    '''добавляет шарик в список шаров уровня'''
     def add_ball(self):
         used_colors = []
         col1 = self.balls[-1].color
@@ -41,6 +44,7 @@ class Level():
         self.balls_amount += 1
         self.balls.append(_generate_ball(self.colors, *self.segments[0].start, used_colors))
 
+    '''движение шаров'''
     def move_ball(self, ball: Ball, distance: float):
         pos = ball.position
         segment_number = ball.segment_number
@@ -48,6 +52,7 @@ class Level():
         ball.position = new_point
         ball.segment_number = new_seg_num
 
+    '''новые координаты объекта'''
     def get_coordinates(self, pos: (int, int), distance: float, segment_number: int):
         cur_seg = self.segments[segment_number]
         new_x = pos[0] + distance * math.cos(cur_seg.angle)
@@ -59,6 +64,7 @@ class Level():
         np = (new_x, new_y)
         return np, segment_number
 
+    '''извлекает информацию об уровне из файла'''
     @staticmethod
     def parse(file: str, screen_size: (int, int)):
         with open(file) as f:

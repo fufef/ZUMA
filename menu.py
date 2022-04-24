@@ -5,7 +5,6 @@ from settings import SettingsWindow
 class Menu(QtWidgets.QFrame):
     def __init__(self, main_window):
         super().__init__()
-        #self.resize(800,800)
         self.main_window = main_window
         self.settingsWindow = SettingsWindow()
 
