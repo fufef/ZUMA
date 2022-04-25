@@ -1,8 +1,9 @@
 from PyQt5 import QtGui
 
-
 '''мяч, которым стреляет пользователь'''
-class userBall():
+
+
+class userBall:
     def __init__(self, color: QtGui.QColor, position: (int, int)):
         self.color = color
         self.position = position

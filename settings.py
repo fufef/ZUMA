@@ -21,12 +21,10 @@ class SettingsWindow(QtWidgets.QFrame):
         self.sound_btn.setFont(font)
 
         self._retranslate_ui()
-        
 
     def _retranslate_ui(self):
         _translate = QtCore.QCoreApplication.translate
         self.sound_btn.setText(_translate("Settings", "Sound"))
-
 
     def open_settings(self):
         self.window.show()

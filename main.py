@@ -1,9 +1,7 @@
 import sys
-import unittest
 from PyQt5 import QtWidgets, QtCore, QtGui
-from PyQt5.QtWidgets import *
-from menu import Menu
 from game import Game
+from menu import Menu
 
 
 class MainWindow(QtWidgets.QMainWindow):

@@ -20,7 +20,7 @@ class GameModel:
             pass
         elif len(self.level.balls) == 0:
             self.levelIndex += 1
-            if(self.levelIndex == len(self.levels)):
+            if self.levelIndex == len(self.levels):
                 self.finished = True
             else:
                 self.level = self.levels[self.levelIndex]

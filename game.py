@@ -1,16 +1,14 @@
-import math
-from geometryExtensions import GeometryExtensions
 from PyQt5 import QtWidgets, QtCore, QtGui
-from PyQt5.QtWidgets import QLineEdit
-from gameModel import GameModel
 from PyQt5.QtCore import QRect, Qt
-import level
+
 from balls import Ball
+from gameModel import GameModel
 from level import Level
 from userBall import userBall
 
-
 '''отображает шар'''
+
+
 def draw_ball(painter, ball: [userBall | Ball]):
     painter.setBrush(QtGui.QBrush(ball.color))
     painter.drawEllipse(int(ball.position[0] - ball.radius), int(ball.position[1] - ball.radius), ball.radius * 2,
@@ -47,7 +45,7 @@ class Game(QtWidgets.QFrame):
         painter = QtGui.QPainter()
         painter.begin(self)
         painter.setPen(QtGui.QPen(QtCore.Qt.black, 10))
-        if(self.model.finished):
+        if self.model.finished:
             rect = QRect(0, 0, 1200, 800)
             painter.drawText(rect, Qt.AlignCenter, "Поздравляем! Ты прошел игру")
         else:

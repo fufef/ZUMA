@@ -1,8 +1,8 @@
-import math
 from math import *
 
-
 '''отрезки, из которых складывается путь шаров'''
+
+
 class Segment():
     def __init__(self, start: (int, int), end: (int, int)):
         self.start = start

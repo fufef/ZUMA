@@ -1,17 +1,18 @@
 import math
 from balls import Ball
 
+
 class GeometryExtensions:
     @classmethod
-    def is_intersect(self, ball1: Ball, ball2: Ball, d: int):
+    def is_intersect(cls, ball1: Ball, ball2: Ball, d: int):
         return math.dist(ball1.position, ball2.position) <= ball1.radius + ball2.radius + d
 
     @classmethod
-    def det(self, a, b):
+    def det(cls, a, b):
         return a[0] * b[1] - a[1] * b[0]
 
     @classmethod
-    def line_intersection(self, line1, line2):
+    def line_intersection(cls, line1, line2):
         xdiff = (line1[0][0] - line1[1][0], line2[0][0] - line2[1][0])
         ydiff = (line1[0][1] - line1[1][1], line2[0][1] - line2[1][1])
 

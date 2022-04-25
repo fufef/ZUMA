@@ -1,6 +1,7 @@
 from PyQt5 import QtWidgets, QtCore, QtGui
-from PyQt5.QtWidgets import *
+
 from settings import SettingsWindow
+
 
 class Menu(QtWidgets.QFrame):
     def __init__(self, main_window):
