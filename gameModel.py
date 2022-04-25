@@ -13,17 +13,20 @@ class GameModel:
         self.level = self.levels[self.levelIndex]
         self.counter = 0
         self.paused = False
+        self.finished = False
 
     def updateGame(self):
-        if self.paused:
+        if self.paused or self.finished:
             pass
         elif len(self.level.balls) == 0:
-            self.level = self.levels[self.levelIndex + 1]
-            self.counter = 0
+            self.levelIndex += 1
+            if(self.levelIndex == len(self.levels)):
+                self.finished = True
+            else:
+                self.level = self.levels[self.levelIndex]
+                self.counter = 0
         elif self.level.game_end:
-            self.level = Level(self.level.number, self.level.segments, self.level.colors, self.level.max_balls,
-                               self.level.screen_size)
-            self.counter = 0
+            self.restart()
         else:
             pairs = zip(reversed(self.level.balls[:-1]), reversed(self.level.balls))
             self.level.move_ball(self.level.balls[-1], self.level.speed)

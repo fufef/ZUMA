@@ -1,7 +1,9 @@
 import math
 from geometryExtensions import GeometryExtensions
 from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5.QtWidgets import QLineEdit
 from gameModel import GameModel
+from PyQt5.QtCore import QRect, Qt
 import level
 from balls import Ball
 from level import Level
@@ -45,20 +47,24 @@ class Game(QtWidgets.QFrame):
         painter = QtGui.QPainter()
         painter.begin(self)
         painter.setPen(QtGui.QPen(QtCore.Qt.black, 10))
+        if(self.model.finished):
+            rect = QRect(0, 0, 1200, 800)
+            painter.drawText(rect, Qt.AlignCenter, "Поздравляем! Ты прошел игру")
+        else:
 
-        for i in self.model.level.segments:
-            painter.drawLine(*i.start, *i.end)
+            for i in self.model.level.segments:
+                painter.drawLine(*i.start, *i.end)
 
-        painter.setPen(QtCore.Qt.NoPen)
+            painter.setPen(QtCore.Qt.NoPen)
 
-        for i in self.model.level.balls:
-            draw_ball(painter, i)
+            for i in self.model.level.balls:
+                draw_ball(painter, i)
 
-        draw_ball(painter, self.model.level.userBallS.static)
-        for i in self.model.level.userBallS.moving:
-            draw_ball(painter, i)
+            draw_ball(painter, self.model.level.userBallS.static)
+            for i in self.model.level.userBallS.moving:
+                draw_ball(painter, i)
 
-        painter.end()
+            painter.end()
 
     def paintEvent(self, event):
         self.model.updateGame()
