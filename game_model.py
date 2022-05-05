@@ -130,7 +130,7 @@ class GameModel:
         prev_seg_num = prev_ball.segment_number
         self.level.move_ball(prev_ball, prev_ball.radius * 2)
         new_ball = Ball(
-            self.level.userBallS.moving[0].color,
+            self.level.user_balls.moving[0].color,
             prev_ball.position, prev_ball.segment_number
         )
         prev_ball.position = prev_pos

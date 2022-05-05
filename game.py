@@ -26,6 +26,10 @@ class Game(QtWidgets.QFrame):
         self.backMenu_btn.setIconSize(QtCore.QSize(55, 40))
         self.backMenu_btn.clicked.connect(self.back_menu_action)
 
+        self.label_1 = QtWidgets.QLabel(self)
+        self.label_1.setFont(QtGui.QFont('BankGothic Md BT', 30))
+
+
         levels = list()
         levels.append(Level.parse("level1.txt", self.screen_size))
         levels.append(Level.parse("level2.txt", self.screen_size))
@@ -46,8 +50,10 @@ class Game(QtWidgets.QFrame):
         painter.begin(self)
         painter.setPen(QtGui.QPen(QtCore.Qt.black, 10))
         if self.model.finished:
-            rect = QRect(0, 0, 1200, 800)
-            painter.drawText(rect, Qt.AlignCenter, "Поздравляем! Ты прошел игру")
+            self.label_1.adjustSize()
+            self.label_1.setText("Congrants! You win!")
+            self.label_1.setStyleSheet("color: rgb(255, 255, 255);")
+            self.label_1.move(320, 350)
         else:
             for i in self.model.level.segments:
                 painter.drawLine(*i.start, *i.end)
