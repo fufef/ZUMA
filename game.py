@@ -2,11 +2,9 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtCore import QRect, Qt
 
 from balls import Ball
-from gameModel import GameModel
+from game_model import GameModel
 from level import Level
 from userBall import userBall
-
-'''отображает шар'''
 
 
 def draw_ball(painter, ball: [userBall | Ball]):
@@ -20,7 +18,6 @@ class Game(QtWidgets.QFrame):
         super().__init__()
         self.screen_size = (main_window.size().width(), main_window.size().height())
         self.main_window = main_window
-
         self.backMenu_btn = QtWidgets.QPushButton(self)
         self.backMenu_btn.setGeometry(QtCore.QRect(25, 25, 55, 45))
         self.backMenu_btn.setObjectName("backMenu_btn")
@@ -52,7 +49,6 @@ class Game(QtWidgets.QFrame):
             rect = QRect(0, 0, 1200, 800)
             painter.drawText(rect, Qt.AlignCenter, "Поздравляем! Ты прошел игру")
         else:
-
             for i in self.model.level.segments:
                 painter.drawLine(*i.start, *i.end)
 
@@ -61,14 +57,14 @@ class Game(QtWidgets.QFrame):
             for i in self.model.level.balls:
                 draw_ball(painter, i)
 
-            draw_ball(painter, self.model.level.userBallS.static)
-            for i in self.model.level.userBallS.moving:
+            draw_ball(painter, self.model.level.user_balls.static)
+            for i in self.model.level.user_balls.moving:
                 draw_ball(painter, i)
 
             painter.end()
 
     def paintEvent(self, event):
-        self.model.updateGame()
+        self.model.update_game()
         self.model.collapse()
         self.draw()
         self.update()
