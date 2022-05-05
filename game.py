@@ -24,6 +24,7 @@ class Game(QtWidgets.QFrame):
         self.backMenu_btn = QtWidgets.QPushButton(self)
         self.backMenu_btn.setGeometry(QtCore.QRect(25, 25, 40, 30))
         self.backMenu_btn.setObjectName("backMenu_btn")
+        self.backMenu_btn.setText("Back")
         self.backMenu_btn.clicked.connect(self.back_menu_action)
 
         levels = list()
