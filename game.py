@@ -2,7 +2,7 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtCore import QRect, Qt
 
 from balls import Ball
-from gameModel import GameModel
+from game_model import GameModel
 from level import Level
 from userBall import userBall
 
@@ -58,14 +58,14 @@ class Game(QtWidgets.QFrame):
             for i in self.model.level.balls:
                 draw_ball(painter, i)
 
-            draw_ball(painter, self.model.level.userBallS.static)
-            for i in self.model.level.userBallS.moving:
+            draw_ball(painter, self.model.level.user_balls.static)
+            for i in self.model.level.user_balls.moving:
                 draw_ball(painter, i)
 
             painter.end()
 
     def paintEvent(self, event):
-        self.model.updateGame()
+        self.model.update_game()
         self.model.collapse()
         self.draw()
         self.update()

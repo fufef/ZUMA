@@ -45,7 +45,7 @@ class Level:
         self.balls_amount = 1
         self.max_balls = max_balls
         self.game_end = False
-        self.userBallS = userBalls(generate_color(colors, []), screen_size)
+        self.user_balls = userBalls(generate_color(colors, []), screen_size)
         self.screen_size = screen_size
 
         self.speed = 0.06

@@ -1,7 +1,7 @@
 import math
 from level import Level
 from balls import Ball
-from geometryExtensions import GeometryExtensions
+from geometry_extensions import GeometryExtensions
 from userBall import userBall
 from level import generate_color
 
@@ -15,7 +15,7 @@ class GameModel:
         self.paused = False
         self.finished = False
 
-    def updateGame(self):
+    def update_game(self):
         """Updates state of the game and moves all balls"""
         if self.paused or self.finished:
             pass
@@ -44,15 +44,15 @@ class GameModel:
                 self.level.add_ball()
 
             del_balls = set()
-            for i in self.level.userBallS.moving:
+            for i in self.level.user_balls.moving:
                 i.position = (i.position[0] + i.moveSpeed[0], i.position[1] + i.moveSpeed[1])
 
                 if not i.is_on_screen((1200, 800)):
                     del_balls.add(i)
 
-            self.level.userBallS.moving = list(filter(lambda x: x not in del_balls, self.level.userBallS.moving))
+            self.level.user_balls.moving = list(filter(lambda x: x not in del_balls, self.level.user_balls.moving))
 
-            for i in self.level.userBallS.moving:
+            for i in self.level.user_balls.moving:
                 self.intersect_balls(i)
 
     def intersect_balls(self, i):
@@ -69,7 +69,7 @@ class GameModel:
 
             if abs(d1 + d2 - d3) < epsilon:
                 p = GeometryExtensions.line_intersection((segment.start, segment.end),
-                                                         (self.level.userBallS.static.position, i.position))
+                                                         (self.level.user_balls.static.position, i.position))
                 indices, nearest_index1, min_dist1, nearest_index2, min_dist2, r = \
                     self._get_balls_intersection_data(p, epsilon)
 
@@ -79,7 +79,7 @@ class GameModel:
                     else:
                         self._insert_standard(nearest_index1, nearest_index2, min_dist2, r, j1)
 
-                    self.level.userBallS.moving.remove(i)
+                    self.level.user_balls.moving.remove(i)
 
     def _get_balls_intersection_data(self, p, epsilon):
         """Returns information about intersected balls
@@ -117,7 +117,7 @@ class GameModel:
         prev_pos = prev_ball.position
         prev_seg_num = prev_ball.segment_number
         self.level.move_ball(prev_ball, prev_ball.radius * 2)
-        new_ball = Ball(self.level.userBallS.moving[0].color, prev_ball.position,
+        new_ball = Ball(self.level.user_balls.moving[0].color, prev_ball.position,
                         prev_ball.segment_number)
         prev_ball.position = prev_pos
         prev_ball.segment_number = prev_seg_num
@@ -145,7 +145,7 @@ class GameModel:
 
         nearest_index = min(nearest_index1, nearest_index2)
         prev_ball = self.level.balls[nearest_index]
-        new_ball = Ball(self.level.userBallS.moving[0].color, prev_ball.position, seg_num)
+        new_ball = Ball(self.level.user_balls.moving[0].color, prev_ball.position, seg_num)
         self.level.balls.insert(nearest_index + 1, new_ball)
 
         for k in range(nearest_index + 1):
@@ -174,14 +174,14 @@ class GameModel:
         :param p: point to shoot
         :type p: (int, int)
         """
-        static_ball = self.level.userBallS.static
+        static_ball = self.level.user_balls.static
         delta_x = p[0] - static_ball.position[0]
         delta_y = p[1] - static_ball.position[1]
         speed = 8
         angle = math.atan2(delta_y, delta_x)
         static_ball.moveSpeed = (speed * math.cos(angle), speed * math.sin(angle))
-        self.level.userBallS.moving.append(static_ball)
-        self.level.userBallS.static = userBall(generate_color(self.level.colors, []), static_ball.position)
+        self.level.user_balls.moving.append(static_ball)
+        self.level.user_balls.static = userBall(generate_color(self.level.colors, []), static_ball.position)
 
     def pause(self):
         """Pauses of unpauses the game"""
