@@ -9,8 +9,10 @@ class userBall:
         self.moveSpeed = (0, 0)
 
     def __eq__(self, other):
-        return isinstance(other, userBall) and self.color == other.color and self.position == other.position and \
-               self.moveSpeed == other.moveSpeed
+        return (
+                isinstance(other, userBall) and self.color == other.color
+                and self.position == other.position and self.moveSpeed == other.moveSpeed
+        )
 
     def __hash__(self):
         p = 53

@@ -19,9 +19,9 @@ class GameModel:
         """Updates state of the game and moves all balls"""
         if self.paused or self.finished:
             pass
-        elif len(self.level.balls) == 0:
+        elif self.__level_completed__():
             self.levelIndex += 1
-            if self.levelIndex == len(self.levels):
+            if self.__game_completed__():
                 self.finished = True
             else:
                 self.level = self.levels[self.levelIndex]
@@ -29,31 +29,43 @@ class GameModel:
         elif self.level.game_end:
             self.restart()
         else:
-            pairs = zip(reversed(self.level.balls[:-1]), reversed(self.level.balls))
-            self.level.move_ball(self.level.balls[-1], self.level.speed)
-            for i, j in pairs:
-                if math.dist(i.position, j.position) <= i.radius + j.radius:
-                    self.level.move_ball(i, self.level.speed)
+            self.__move_balls__()
+            self.__try_add_new_ball__()
+            self.__move_user_balls__()
+            self.__process_intersections__()
 
-            self.counter += 1
+    def __process_intersections__(self):
+        for i in self.level.user_balls.moving:
+            self.intersect_balls(i)
 
-            diameter_over_speed = self.level.balls[0].radius * 2 / self.level.speed
+    def __move_user_balls__(self):
+        del_balls = set()
+        for i in self.level.user_balls.moving:
+            i.position = (i.position[0] + i.moveSpeed[0], i.position[1] + i.moveSpeed[1])
 
-            if self.counter >= diameter_over_speed and self.level.balls_amount < self.level.max_balls:
-                self.counter -= diameter_over_speed
-                self.level.add_ball()
+            if not i.is_on_screen((1200, 800)):
+                del_balls.add(i)
+        self.level.user_balls.moving = list(filter(lambda x: x not in del_balls, self.level.user_balls.moving))
 
-            del_balls = set()
-            for i in self.level.user_balls.moving:
-                i.position = (i.position[0] + i.moveSpeed[0], i.position[1] + i.moveSpeed[1])
+    def __try_add_new_ball__(self):
+        self.counter += 1
+        diameter_over_speed = self.level.balls[0].radius * 2 / self.level.speed
+        if self.counter >= diameter_over_speed and self.level.balls_amount < self.level.max_balls:
+            self.counter -= diameter_over_speed
+            self.level.add_ball()
 
-                if not i.is_on_screen((1200, 800)):
-                    del_balls.add(i)
+    def __move_balls__(self):
+        pairs = zip(reversed(self.level.balls[:-1]), reversed(self.level.balls))
+        self.level.move_ball(self.level.balls[-1], self.level.speed)
+        for i, j in pairs:
+            if math.dist(i.position, j.position) <= i.radius + j.radius:
+                self.level.move_ball(i, self.level.speed)
 
-            self.level.user_balls.moving = list(filter(lambda x: x not in del_balls, self.level.user_balls.moving))
+    def __level_completed__(self):
+        return len(self.level.balls) == 0
 
-            for i in self.level.user_balls.moving:
-                self.intersect_balls(i)
+    def __game_completed__(self):
+        return self.levelIndex == len(self.levels)
 
     def intersect_balls(self, i):
         """Checks if user ball hit another ball
@@ -62,7 +74,7 @@ class GameModel:
         :type i: userBall
         """
         epsilon = 1
-        for j1, segment in enumerate(self.level.segments):
+        for segment_index, segment in enumerate(self.level.segments):
             d1 = math.dist(segment.start, i.position)
             d2 = math.dist(segment.end, i.position)
             d3 = math.dist(segment.end, segment.start)
@@ -77,7 +89,7 @@ class GameModel:
                     if indices == [0]:
                         self._insert_in_begin_position()
                     else:
-                        self._insert_standard(nearest_index1, nearest_index2, min_dist2, r, j1)
+                        self._insert_standard(nearest_index1, nearest_index2, min_dist2, r, segment_index)
 
                     self.level.user_balls.moving.remove(i)
 
@@ -117,8 +129,10 @@ class GameModel:
         prev_pos = prev_ball.position
         prev_seg_num = prev_ball.segment_number
         self.level.move_ball(prev_ball, prev_ball.radius * 2)
-        new_ball = Ball(self.level.user_balls.moving[0].color, prev_ball.position,
-                        prev_ball.segment_number)
+        new_ball = Ball(
+            self.level.userBallS.moving[0].color,
+            prev_ball.position, prev_ball.segment_number
+        )
         prev_ball.position = prev_pos
         prev_ball.segment_number = prev_seg_num
         self.level.balls.insert(0, new_ball)
