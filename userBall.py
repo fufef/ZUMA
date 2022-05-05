@@ -1,7 +1,5 @@
 from PyQt5 import QtGui
 
-'''мяч, которым стреляет пользователь'''
-
 
 class userBall:
     def __init__(self, color: QtGui.QColor, position: (int, int)):
@@ -22,7 +20,7 @@ class userBall:
         return 0 <= self.position[0] <= screen_size[0] and 0 <= self.position[1] <= screen_size[1]
 
 
-class userBalls():
+class userBalls:
     def __init__(self, color: QtGui.QColor, screen_size: (int, int)):
         self.moving = list()
         self.static = userBall(color, (screen_size[0] / 2, screen_size[1] / 2))

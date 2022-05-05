@@ -4,7 +4,7 @@ from balls import Ball
 
 
 class is_intersect_tests(unittest.TestCase):
-    def test_notItersected(self):
+    def test_not_intersected(self):
         result = GeometryExtensions.is_intersect(Ball(None, (0, 0)), Ball(None, (0, 100)), 1)
         self.assertEqual(result, False)
 
@@ -19,11 +19,11 @@ class is_intersect_tests(unittest.TestCase):
 
 class det_tests(unittest.TestCase):
     def test_countsCorrectly_WithZeroes(self):
-        result = GeometryExtensions.det((0, 0), (0, 0))
+        result = GeometryExtensions.__det__((0, 0), (0, 0))
         self.assertEqual(result, 0)
 
     def test_countsCorrectly_WithNonZeroes(self):
-        result = GeometryExtensions.det((1, 2), (3, 4))
+        result = GeometryExtensions.__det__((1, 2), (3, 4))
         self.assertEqual(result, -2)
 
 
