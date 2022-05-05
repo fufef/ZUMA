@@ -11,8 +11,7 @@ class Menu(QtWidgets.QFrame):
 
         font = QtGui.QFont()
         font.setPointSize(28)
-        
-        '''кнопки меню'''
+
         self.start_btn = QtWidgets.QPushButton(self)
         self.start_btn.setGeometry(QtCore.QRect(450, 350, 300, 100))
         self.start_btn.setFont(font)
@@ -24,10 +23,9 @@ class Menu(QtWidgets.QFrame):
         self.config_btn.setFont(font)
         self.config_btn.setObjectName("config_btn")
         self.config_btn.clicked.connect(self.settingsWindow.open_settings)
- 
+
         self._retranslate_ui()
-        
-        
+
     def _retranslate_ui(self):
         _translate = QtCore.QCoreApplication.translate
         self.start_btn.setText(_translate("Menu", "Играть"))

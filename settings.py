@@ -1,4 +1,3 @@
-import pygame
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import *
 
@@ -14,7 +13,6 @@ class SettingsWindow(QtWidgets.QFrame):
         font = QtGui.QFont()
         font.setPointSize(20)
 
-        '''кнопка в настройках'''
         self.sound_btn = QRadioButton(self.window)
         self.sound_btn.setObjectName(u"sound_btn")
         self.sound_btn.setGeometry(QtCore.QRect(50, 20, 150, 60))
