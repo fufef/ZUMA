@@ -22,8 +22,11 @@ class Game(QtWidgets.QFrame):
         self.main_window = main_window
 
         self.backMenu_btn = QtWidgets.QPushButton(self)
-        self.backMenu_btn.setGeometry(QtCore.QRect(25, 25, 40, 30))
+        self.backMenu_btn.setGeometry(QtCore.QRect(25, 25, 55, 45))
         self.backMenu_btn.setObjectName("backMenu_btn")
+        self.backMenu_btn.setIcon(QtGui.QIcon('resources/arrow_white.png'))
+        self.backMenu_btn.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n")
+        self.backMenu_btn.setIconSize(QtCore.QSize(55, 40))
         self.backMenu_btn.clicked.connect(self.back_menu_action)
 
         levels = list()
