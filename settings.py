@@ -1,3 +1,4 @@
+import pygame
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtGui import QFontDatabase
 from PyQt5.QtWidgets import *
@@ -21,12 +22,41 @@ class SettingsWindow(QtWidgets.QFrame):
         self.sound_btn.setGeometry(QtCore.QRect(50, 170, 150, 60))
         self.sound_btn.setFont(font)
         self.sound_btn.setStyleSheet(style)
+        self.sound_btn.setChecked(False)
+        self.sound_btn.clicked.connect(lambda: self.change_sound())
 
+        self.level_box = QtWidgets.QComboBox(self.window)
+        self.level_box.setObjectName(u"level_btn")
+        self.level_box.setGeometry(QtCore.QRect(50, 220, 220, 50))
+        self.level_box.setStyleSheet(style)
+        self.level_box.addItem("select level...")
+        self.level_box.setFont(QtGui.QFont("BankGothic Md BT", 15))
+        self.level_box.addItem("level 1")
+        self.level_box.addItem("level 2")
+        self.level_box.addItem("level 3")
+        self.level_box.addItem("level 4")
+        self.level_box.addItem("level 5")
+        self.level_box.addItem("level 6")
+        self.level_box.addItem("level 7")
+        self.level_box.addItem("level 8")
+        self.level_box.addItem("level 9")
+        # ToDo смена уровней + новые уровни
+
+        pygame.init()
         self._retranslate_ui()
 
     def _retranslate_ui(self):
         _translate = QtCore.QCoreApplication.translate
-        self.sound_btn.setText(_translate("Settings", "Sound"))
+        self.sound_btn.setText(_translate("Settings", "sound"))
+
+    def change_sound(self):
+        if self.sound_btn.isChecked():
+            musicname = "New Worlds.mp3"
+            music = pygame.mixer.Sound("resources/" + musicname)
+            pygame.mixer.Channel(1).play(music, -1)
+        else:
+            pygame.mixer.Channel(1).pause()
+
 
     def open_settings(self):
         self.window.show()

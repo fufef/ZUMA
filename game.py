@@ -1,4 +1,5 @@
 from PyQt5 import QtWidgets, QtCore, QtGui
+import pygame
 from PyQt5.QtCore import QRect, Qt
 
 from balls import Ball
