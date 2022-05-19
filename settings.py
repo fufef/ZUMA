@@ -3,10 +3,13 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtGui import QFontDatabase
 from PyQt5.QtWidgets import *
 
+from game_model import GameModel
+
 
 class SettingsWindow(QtWidgets.QFrame):
-    def __init__(self):
+    def __init__(self, model: GameModel):
         super().__init__()
+        self.model = model
         self.window = QtWidgets.QWidget()
         self.window.setWindowTitle('Settings')
         self.window.setFixedSize(300, 400)
@@ -40,9 +43,14 @@ class SettingsWindow(QtWidgets.QFrame):
         self.level_box.addItem("level 7")
         self.level_box.addItem("level 8")
         self.level_box.addItem("level 9")
+        self.level_box.activated.connect(lambda: self.change_start_level(self.level_box.currentIndex()))
         # ToDo смена уровней + новые уровни
 
         self._retranslate_ui()
+
+    def change_start_level(self, n):
+        self.model.levelIndex = n - 1
+        self.model.level = self.model.levels[self.model.levelIndex]
 
     def _retranslate_ui(self):
         _translate = QtCore.QCoreApplication.translate

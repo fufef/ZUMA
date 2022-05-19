@@ -1,14 +1,14 @@
 from PyQt5 import QtWidgets, QtCore, QtGui
-from PyQt5.QtGui import QFont, QFontDatabase
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtGui import QFontDatabase
+
 from settings import SettingsWindow
 
 
 class Menu(QtWidgets.QFrame):
-    def __init__(self, main_window):
+    def __init__(self, main_window, model):
         super().__init__()
         self.main_window = main_window
-        self.settingsWindow = SettingsWindow()
+        self.settingsWindow = SettingsWindow(model)
         self.setObjectName("MenuWindow")
         self.setStyleSheet("#MenuWindow{border-image:url(resources/background_menu.png)}")
 
@@ -29,7 +29,6 @@ class Menu(QtWidgets.QFrame):
         self.config_btn.setObjectName("config_btn")
         self.config_btn.clicked.connect(self.settingsWindow.open_settings)
         self.config_btn.setStyleSheet(style)
-
         self._retranslate_ui()
 
     def _retranslate_ui(self):

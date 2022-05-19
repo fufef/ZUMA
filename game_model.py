@@ -7,8 +7,8 @@ from level import generate_color
 
 
 class GameModel:
-    def __init__(self, levels: list):
-        self.levelIndex = 0
+    def __init__(self, levels: list, start_index):
+        self.levelIndex = start_index
         self.levels = levels
         self.level = self.levels[self.levelIndex]
         self.counter = 0
@@ -168,6 +168,7 @@ class GameModel:
     def collapse(self):
         """Removes adjacent balls with the same color"""
         r = set()
+        result = False
         for i in range(len(self.level.balls)):
             ball = self.level.balls[i]
             collided = [j for j in range(i - 1, i + 2, 2)
@@ -180,7 +181,9 @@ class GameModel:
             if len(same_clr_collided) > 1:
                 r.add(ball)
                 r.update(same_clr_collided)
+                result = True
         self.level.balls = list(filter(lambda x: x not in r, self.level.balls))
+        return result
 
     def shoot(self, p):
         """Makes new user ball moving

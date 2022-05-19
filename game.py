@@ -15,7 +15,7 @@ def draw_ball(painter, ball: [userBall | Ball]):
 
 
 class Game(QtWidgets.QFrame):
-    def __init__(self, main_window):
+    def __init__(self, main_window, model):
         super().__init__()
         self.screen_size = (main_window.size().width(), main_window.size().height())
         self.main_window = main_window
@@ -27,16 +27,7 @@ class Game(QtWidgets.QFrame):
         self.backMenu_btn.setIconSize(QtCore.QSize(55, 40))
         self.backMenu_btn.clicked.connect(self.back_menu_action)
 
-        self.label_1 = QtWidgets.QLabel(self)
-        self.label_1.setFont(QtGui.QFont('BankGothic Md BT', 30))
-
-
-        levels = list()
-        levels.append(Level.parse("level1.txt", self.screen_size))
-        levels.append(Level.parse("level2.txt", self.screen_size))
-        levels.append(Level.parse("level3.txt", self.screen_size))
-
-        self.model = GameModel(levels)
+        self.model = model
 
         self.setObjectName("GameWindow")
         self.setStyleSheet("#GameWindow{border-image:url(resources/background.png)}")
@@ -72,7 +63,9 @@ class Game(QtWidgets.QFrame):
 
     def paintEvent(self, event):
         self.model.update_game()
-        self.model.collapse()
+        if self.model.collapse():
+            sound = pygame.mixer.Sound("resources/shoot.mp3")
+            pygame.mixer.Channel(0).play(sound)
         self.draw()
         self.update()
 
