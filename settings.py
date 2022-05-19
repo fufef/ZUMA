@@ -42,7 +42,6 @@ class SettingsWindow(QtWidgets.QFrame):
         self.level_box.addItem("level 9")
         # ToDo смена уровней + новые уровни
 
-        pygame.init()
         self._retranslate_ui()
 
     def _retranslate_ui(self):

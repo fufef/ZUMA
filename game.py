@@ -79,6 +79,8 @@ class Game(QtWidgets.QFrame):
     def mousePressEvent(self, e: QtGui.QMouseEvent):
         if not self.model.paused:
             self.model.shoot((e.windowPos().x(), e.windowPos().y()))
+            sound = pygame.mixer.Sound("resources/shoot.mp3")
+            pygame.mixer.Channel(0).play(sound)
 
     def keyPressEvent(self, e: QtGui.QKeyEvent) -> None:
         if e.nativeScanCode() == 25:
