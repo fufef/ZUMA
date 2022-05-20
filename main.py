@@ -1,15 +1,15 @@
 import sys
 from PyQt5 import QtWidgets, QtCore, QtGui
-from PyQt5.QtWidgets import *
-from menu import Menu
 from game import Game
+from menu import Menu
+
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowIcon(QtGui.QIcon("resources/Icon.png"))
         self.setWindowTitle("Zuma THE GAME")
-        self.setFixedSize(1200, 800)#todo set correct size
+        self.setFixedSize(1200, 800)
 
         self.central_widget = QtWidgets.QWidget(self)
         self.stacked_widget = QtWidgets.QStackedWidget(self.central_widget)
@@ -29,6 +29,5 @@ class MainWindow(QtWidgets.QMainWindow):
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     w = MainWindow()
-    #w.setObjectName("MainWindow")
     w.show()
     sys.exit(app.exec_())
