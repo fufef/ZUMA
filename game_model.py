@@ -14,6 +14,7 @@ class GameModel:
         self.counter = 0
         self.paused = False
         self.finished = False
+        self.score = 0
 
     def update_game(self):
         """Updates state of the game and moves all balls"""
@@ -21,6 +22,7 @@ class GameModel:
             pass
         elif self.__level_completed__():
             self.levelIndex += 1
+            self.score += 100
             if self.__game_completed__():
                 self.finished = True
             else:

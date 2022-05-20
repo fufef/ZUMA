@@ -44,7 +44,6 @@ class SettingsWindow(QtWidgets.QFrame):
         self.level_box.addItem("level 8")
         self.level_box.addItem("level 9")
         self.level_box.activated.connect(lambda: self.change_start_level(self.level_box.currentIndex()))
-        # ToDo смена уровней + новые уровни
 
         self._retranslate_ui()
 

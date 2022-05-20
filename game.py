@@ -1,10 +1,7 @@
 from PyQt5 import QtWidgets, QtCore, QtGui
 import pygame
-from PyQt5.QtCore import QRect, Qt
 
 from balls import Ball
-from game_model import GameModel
-from level import Level
 from userBall import userBall
 
 
@@ -23,7 +20,7 @@ class Game(QtWidgets.QFrame):
         self.backMenu_btn.setGeometry(QtCore.QRect(25, 25, 55, 45))
         self.backMenu_btn.setObjectName("backMenu_btn")
         self.backMenu_btn.setIcon(QtGui.QIcon('resources/arrow_white.png'))
-        self.backMenu_btn.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n")
+        self.backMenu_btn.setStyleSheet("background-color: rgba(255, 255, 255, 0);")
         self.backMenu_btn.setIconSize(QtCore.QSize(55, 40))
         self.backMenu_btn.clicked.connect(self.back_menu_action)
 
@@ -31,6 +28,11 @@ class Game(QtWidgets.QFrame):
 
         self.setObjectName("GameWindow")
         self.setStyleSheet("#GameWindow{border-image:url(resources/background.png)}")
+
+        self.label_score = QtWidgets.QLabel("Score: " + str(self.model.score), self)
+        self.label_score.setFont(QtGui.QFont("BankGothic Md BT", 24))
+        self.label_score.setStyleSheet("color: rgb(255, 255, 255);")
+        self.label_score.setGeometry(QtCore.QRect(825, 25, 500, 45))
 
     def back_menu_action(self):
         self.model.level.game_end = True
@@ -41,6 +43,7 @@ class Game(QtWidgets.QFrame):
         painter = QtGui.QPainter()
         painter.begin(self)
         painter.setPen(QtGui.QPen(QtCore.Qt.black, 10))
+        self.label_score.setText("Score: " + str(self.model.score))
         if self.model.finished:
             self.label_1.adjustSize()
             self.label_1.setText("Congrants! You win!")
@@ -64,7 +67,9 @@ class Game(QtWidgets.QFrame):
     def paintEvent(self, event):
         self.model.update_game()
         if self.model.collapse():
-            sound = pygame.mixer.Sound("resources/shoot.mp3")
+            self.model.score = min(99999, self.model.score + 10)
+            sound = pygame.mixer.Sound("resources/pop.mp3")
+            sound.set_volume(0.1)
             pygame.mixer.Channel(0).play(sound)
         self.draw()
         self.update()
@@ -73,6 +78,7 @@ class Game(QtWidgets.QFrame):
         if not self.model.paused:
             self.model.shoot((e.windowPos().x(), e.windowPos().y()))
             sound = pygame.mixer.Sound("resources/shoot.mp3")
+            sound.set_volume(0.1)
             pygame.mixer.Channel(0).play(sound)
 
     def keyPressEvent(self, e: QtGui.QKeyEvent) -> None:
