@@ -22,7 +22,7 @@ class GameModel:
             pass
         elif self.__level_completed__():
             self.levelIndex += 1
-            self.score += 100
+            self.score += 100 * self.levelIndex
             if self.__game_completed__():
                 self.finished = True
             else:
