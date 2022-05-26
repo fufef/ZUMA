@@ -6,6 +6,23 @@ from userBall import userBall
 from level import generate_color
 
 
+def get_default():
+    size = (1200, 800)
+    levels = list()
+    levels.append(Level.parse("level1.txt", size))
+    levels.append(Level.parse("level2.txt", size))
+    levels.append(Level.parse("level3.txt", size))
+    levels.append(Level.parse("level4.txt", size))
+    levels.append(Level.parse("level5.txt", size))
+    levels.append(Level.parse("level6.txt", size))
+    levels.append(Level.parse("level7.txt", size))
+    levels.append(Level.parse("level8.txt", size))
+    levels.append(Level.parse("level9.txt", size))
+
+    model = GameModel(levels, 0)
+    return model
+
+
 class GameModel:
     def __init__(self, levels: list, start_index):
         self.levelIndex = start_index
