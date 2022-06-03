@@ -10,9 +10,9 @@ from userBall import userBall
 
 def get_model():
     levels = list()
-    levels.append(Level.parse("level1.txt", (1000, 1000)))
-    levels.append(Level.parse("level2.txt", (1000, 1000)))
-    levels.append(Level.parse("level3.txt", (1000, 1000)))
+    levels.append(Level.parse("../levels/level1.txt", (1000, 1000)))
+    levels.append(Level.parse("../levels/level2.txt", (1000, 1000)))
+    levels.append(Level.parse("../levels/level3.txt", (1000, 1000)))
     return GameModel(levels)
 
 

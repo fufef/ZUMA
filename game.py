@@ -33,6 +33,7 @@ class Game(QtWidgets.QFrame):
         self.label_score.setFont(QtGui.QFont("BankGothic Md BT", 24))
         self.label_score.setStyleSheet("color: rgb(255, 255, 255);")
         self.label_score.setGeometry(QtCore.QRect(825, 25, 500, 45))
+        self.label_1 = QtWidgets.QLabel("", self)
 
     def back_menu_action(self):
         self.model.level.game_end = True
@@ -48,7 +49,11 @@ class Game(QtWidgets.QFrame):
             self.label_1.adjustSize()
             self.label_1.setText("Congrants! You win!")
             self.label_1.setStyleSheet("color: rgb(255, 255, 255);")
+            self.label_1.setGeometry(QtCore.QRect(600, 400, 600, 100))
+            self.label_1.setFont(QtGui.QFont("BankGothic Md BT", 24))
             self.label_1.move(320, 350)
+            self.model.score = 0
+            self.model.levelIndex = -1
         else:
             for i in self.model.level.segments:
                 painter.drawLine(*i.start, *i.end)
