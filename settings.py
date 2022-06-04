@@ -1,6 +1,5 @@
 import pygame
 from PyQt5 import QtWidgets, QtGui, QtCore
-from PyQt5.QtGui import QFontDatabase
 from PyQt5.QtWidgets import *
 
 from game_model import GameModel

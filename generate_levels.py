@@ -29,7 +29,7 @@ def generate_segments(screen_size: tuple, c: tuple):
     return res + "\n"
 
 
-with open("level3.txt", 'w') as f:
+with open("levels/level3.txt", 'w') as f:
     f.write("3 \n")
     f.write(generate_segments((1200, 800), (55, 45)))
     f.write("#CC00AA #FF9900 #333399 \n")

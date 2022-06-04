@@ -12,8 +12,10 @@ def draw_ball(painter, ball: [userBall | Ball]):
 
 
 class Game(QtWidgets.QFrame):
-    def __init__(self, main_window, model):
+    def __init__(self, main_window, model, users, name):
         super().__init__()
+        self.users = users
+        self.name = name
         self.screen_size = (main_window.size().width(), main_window.size().height())
         self.main_window = main_window
         self.backMenu_btn = QtWidgets.QPushButton(self)
@@ -33,10 +35,11 @@ class Game(QtWidgets.QFrame):
         self.label_score.setFont(QtGui.QFont("BankGothic Md BT", 24))
         self.label_score.setStyleSheet("color: rgb(255, 255, 255);")
         self.label_score.setGeometry(QtCore.QRect(825, 25, 500, 45))
+        self.label_1 = QtWidgets.QLabel("", self)
 
     def back_menu_action(self):
-        self.model.level.game_end = True
         self.model.paused = False
+        self.users[self.name] = self.model
         self.main_window.change_window(0)
 
     def draw(self):
@@ -48,6 +51,8 @@ class Game(QtWidgets.QFrame):
             self.label_1.adjustSize()
             self.label_1.setText("Congrants! You win!")
             self.label_1.setStyleSheet("color: rgb(255, 255, 255);")
+            self.label_1.setGeometry(QtCore.QRect(600, 400, 600, 100))
+            self.label_1.setFont(QtGui.QFont("BankGothic Md BT", 24))
             self.label_1.move(320, 350)
         else:
             for i in self.model.level.segments:
