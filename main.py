@@ -11,13 +11,9 @@ if __name__ == "__main__":
         users = pickle.load(open('users.pkl', 'rb'))
     except:
         users = {}
-    u = users.copy()
-    for i in u:
-        if u[i].finished:
-            u[i] = get_default()
-    users = u
-    pickle.dump(users, open('users.pkl', 'wb'))
-    users = pickle.load(open('users.pkl', 'rb'))
+    for i in users:
+        if users[i].finished:
+            users[i] = get_default()
     try:
         app = QtWidgets.QApplication(sys.argv)
         w = RegistrationWindow(users)

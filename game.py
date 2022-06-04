@@ -1,11 +1,8 @@
-import pickle
-
 from PyQt5 import QtWidgets, QtCore, QtGui
 import pygame
 
 from balls import Ball
 from userBall import userBall
-#from menu import Menu
 
 
 def draw_ball(painter, ball: [userBall | Ball]):

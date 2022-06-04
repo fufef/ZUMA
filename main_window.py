@@ -24,7 +24,4 @@ class MainWindow(QtWidgets.QMainWindow):
         pygame.init()
 
     def change_window(self, number):
-        try:
-            self.stacked_widget.setCurrentIndex(number)
-        except Exception as e:
-            print(e)
+        self.stacked_widget.setCurrentIndex(number)
