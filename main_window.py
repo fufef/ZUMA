@@ -6,7 +6,7 @@ from menu import Menu
 
 
 class MainWindow(QtWidgets.QMainWindow):
-    def __init__(self, model):
+    def __init__(self, model, users, name):
         super().__init__()
         self.setWindowIcon(QtGui.QIcon("resources/Icon.png"))
         self.setWindowTitle("Zuma THE GAME")
@@ -18,8 +18,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setCentralWidget(self.central_widget)
 
         self.model = model
-        game = Game(self, self.model)
-        self.stacked_widget.addWidget(Menu(self, self.model))
+        game = Game(self, self.model, users, name)
+        self.stacked_widget.addWidget(Menu(self, self.model, users, name))
         self.stacked_widget.addWidget(game)
         pygame.init()
 

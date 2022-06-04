@@ -1,3 +1,5 @@
+import pickle
+
 from PyQt5 import QtWidgets, QtCore, QtGui
 import pygame
 
@@ -12,8 +14,10 @@ def draw_ball(painter, ball: [userBall | Ball]):
 
 
 class Game(QtWidgets.QFrame):
-    def __init__(self, main_window, model):
+    def __init__(self, main_window, model, users, name):
         super().__init__()
+        self.users = users
+        self.name = name
         self.screen_size = (main_window.size().width(), main_window.size().height())
         self.main_window = main_window
         self.backMenu_btn = QtWidgets.QPushButton(self)
@@ -38,7 +42,9 @@ class Game(QtWidgets.QFrame):
     def back_menu_action(self):
         self.model.level.game_end = True
         self.model.paused = False
-        self.main_window.change_window(0)
+        self.users[self.name] = self.model
+        #self.main_window.change_window(0,Menu(self, self.model, self.users, self.name))
+
 
     def draw(self):
         painter = QtGui.QPainter()

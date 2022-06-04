@@ -16,4 +16,6 @@ if __name__ == "__main__":
         w.show()
         sys.exit(app.exec_())
     finally:
+        w.close()
+        print(users)
         pickle.dump(users, open('users.pkl', 'wb'))

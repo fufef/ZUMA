@@ -2,11 +2,14 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtGui import QFontDatabase
 
 from settings import SettingsWindow
+from game import Game
 
 
 class Menu(QtWidgets.QFrame):
-    def __init__(self, main_window, model):
+    def __init__(self, main_window, model, user, name):
         super().__init__()
+        self.users = user
+        self.name = name
         self.main_window = main_window
         self.settingsWindow = SettingsWindow(model)
         self.setObjectName("MenuWindow")
@@ -35,3 +38,7 @@ class Menu(QtWidgets.QFrame):
         _translate = QtCore.QCoreApplication.translate
         self.start_btn.setText(_translate("Menu", "play"))
         self.config_btn.setText(_translate("Menu", "settings"))
+
+    def start_game(self):
+        self.main_window.change_window(1, Game(self, self.model, self.users, self.name))
+

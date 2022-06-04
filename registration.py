@@ -21,10 +21,9 @@ class RegistrationWindow(QtWidgets.QMainWindow):
         self.textbox.resize(160, 40)
 
     def handle_button(self):
-        if not self.textbox.text() in self.users:
+        if not self.textbox.text() in self.users.keys():
             self.users[self.textbox.text()] = get_default()
-        self.close()
-        w = MainWindow(self.users[self.textbox.text()])
+        w = MainWindow(self.users[self.textbox.text()], self.users, self.textbox.text())
         w.show()
 
 
