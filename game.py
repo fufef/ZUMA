@@ -45,7 +45,6 @@ class Game(QtWidgets.QFrame):
         self.users[self.name] = self.model
         self.main_window.change_window(0)
 
-
     def draw(self):
         painter = QtGui.QPainter()
         painter.begin(self)
@@ -58,9 +57,6 @@ class Game(QtWidgets.QFrame):
             self.label_1.setGeometry(QtCore.QRect(600, 400, 600, 100))
             self.label_1.setFont(QtGui.QFont("BankGothic Md BT", 24))
             self.label_1.move(320, 350)
-            self.model.score = 0
-            self.model.levelIndex = -1
-            #self.model.finished = False
         else:
             for i in self.model.level.segments:
                 painter.drawLine(*i.start, *i.end)
