@@ -5,6 +5,7 @@ import pygame
 
 from balls import Ball
 from userBall import userBall
+#from menu import Menu
 
 
 def draw_ball(painter, ball: [userBall | Ball]):
@@ -40,10 +41,9 @@ class Game(QtWidgets.QFrame):
         self.label_1 = QtWidgets.QLabel("", self)
 
     def back_menu_action(self):
-        self.model.level.game_end = True
         self.model.paused = False
         self.users[self.name] = self.model
-        #self.main_window.change_window(0,Menu(self, self.model, self.users, self.name))
+        self.main_window.change_window(0)
 
 
     def draw(self):
@@ -60,6 +60,7 @@ class Game(QtWidgets.QFrame):
             self.label_1.move(320, 350)
             self.model.score = 0
             self.model.levelIndex = -1
+            #self.model.finished = False
         else:
             for i in self.model.level.segments:
                 painter.drawLine(*i.start, *i.end)
